@@ -1,0 +1,27 @@
+{
+  "name": "cafe-data",
+  "version": "0.0.2",
+  "description": "Data layer for cafe-app",
+  "scripts": {
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w",
+    "clean": "bsb -clean-world",
+    "pretest": "npm run build",
+    "test": "jest",
+    "watch:jest": "jest --watchAll"
+  },
+  "dependencies": {
+    "pouchdb": "^6.4.3",
+    "pouchdb-find": "^6.4.3",
+    "cafe-domain": "github:bsommardahl/cafe-domain"
+  },
+  "devDependencies": {
+    "bs-jest": "^0.3.2",
+    "bs-platform": "^2.2.3"
+  },
+  "jest": {
+    "testMatch": [
+      "<rootDir>/lib/js/**/*test.{bs.js,js}"
+    ]
+  }
+}
