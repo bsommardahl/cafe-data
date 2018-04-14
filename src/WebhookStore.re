@@ -2,7 +2,7 @@ open Js.Promise;
 
 open PouchdbImpl;
 
-let db = PouchdbImpl.connect("Webhooks", Config.Database.livePouchDbConfig);
+let db = PouchdbImpl.connect("webhooks", Config.Database.livePouchDbConfig);
 
 let add = (newWebhook: Webhook.New.t) =>
   db
