@@ -2,20 +2,16 @@ open Js.Promise;
 
 open PouchdbImpl;
 
-open OrderConversion;
-
-open OrderData;
-
 let db = PouchdbImpl.connect("orders", Config.Database.livePouchDbConfig);
 
-let add = (newOrder: Order.newOrder) : Js.Promise.t(Order.order) =>
+let add = (newOrder: Order.newOrder) : Js.Promise.t(Order.t) =>
   db
-  |> post(newOrder |> OrderConversion.newOrderToJs)
+  |> post(newOrder |> Order.newOrderToJs)
   |> then_(revResponse =>
        db
        |> get(revResponse##id)
        |> then_(order => {
-            let o = mapOrderFromJs(order);
+            let o = Order.mapOrderFromJs(order);
             Js.log(
               "orderStore:: added new order for " ++ newOrder.customerName,
             );
@@ -58,8 +54,8 @@ let query = (query: Pouchdb.QueryBuilder.queryT) =>
   |> find(query)
   |> then_(response => resolve(response##docs))
   |> then_(docs => {
-       let mapped: array(OrderData.Order.order) =
-         docs |> Array.map(d => mapOrderFromJs(d));
+       let mapped: array(Order.t) =
+         docs |> Array.map(d => Order.mapOrderFromJs(d));
        Js.log(
          "OrderStore:: got Orders: " ++ string_of_int(docs |> Array.length),
        );
@@ -101,7 +97,7 @@ let getClosedOrders = (startDate: Date.t, endDate: Date.t) => {
   );
 };
 
-let update = (updateOrder: Order.updateOrder) : Js.Promise.t(Order.order) =>
+let update = (updateOrder: Order.updateOrder) : Js.Promise.t(Order.t) =>
   db
   |> get(updateOrder.id)
   |> Js.Promise.then_(orderJs => {
@@ -109,23 +105,23 @@ let update = (updateOrder: Order.updateOrder) : Js.Promise.t(Order.order) =>
        let id = orderJs##_id;
        db
        |> put(
-            updateOrderToJs(
+            Order.updateOrderToJs(
               id,
               rev,
-              orderJs |> OrderConversion.mapOrderFromJs,
+              orderJs |> Order.mapOrderFromJs,
               updateOrder,
             ),
           )
        |> ignore;
        Js.log("orderStore:: updated order for " ++ orderJs##customerName);
-       Js.Promise.resolve(mapOrderFromJs(orderJs));
+       Js.Promise.resolve(Order.mapOrderFromJs(orderJs));
      });
 
 let get = (orderId: string) =>
   db
   |> get(orderId)
   |> then_(js => {
-       let order = mapOrderFromJs(js);
+       let order = Order.mapOrderFromJs(js);
        Js.log("orderStore:: got order for " ++ js##customerName);
        Js.Promise.resolve(order);
      });
