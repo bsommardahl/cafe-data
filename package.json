@@ -11,9 +11,9 @@
     "watch:jest": "jest --watchAll"
   },
   "dependencies": {
+    "cafe-domain": "github:bsommardahl/cafe-domain",
     "pouchdb": "^6.4.3",
-    "pouchdb-find": "^6.4.3",
-    "cafe-domain": "github:bsommardahl/cafe-domain"
+    "pouchdb-find": "^6.4.3"
   },
   "devDependencies": {
     "bs-jest": "^0.3.2",
