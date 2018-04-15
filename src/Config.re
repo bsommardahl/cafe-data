@@ -69,7 +69,7 @@ module Database = {
         "username": "",
         "password": "",
       },
-      "auto_compaction": true,
+      "auto_compaction": false,
     },
   };
   let livePouchDbConfig = {
