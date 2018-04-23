@@ -41,12 +41,6 @@ module OrderPaidQuery = {
     },
     /* "on": Js.Nullable.undefined, */
   };
-  let orderPaidDateInRange = (startDate, endDate) : t => {
-    "paid": {
-      "$exists": Js.Nullable.return(true),
-    },
-    /* "on": Js.Nullable.return({"$gt": startDate, "$lt": endDate}), */
-  };
 };
 
 let query = (query: Pouchdb.QueryBuilder.queryT) =>
