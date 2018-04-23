@@ -30,7 +30,7 @@ let query = (query: Pouchdb.QueryBuilder.queryT) =>
      })
   |> then_(orders => resolve(Array.to_list(orders)));
 
-let getLogs = (startDate: Date.t, endDate: Date.t) => {
+let getLogs = (startDate: Date.t, endDate: Date.t, minimumLevel: int) => {
   Js.log("getting closed orders in range");
   Js.log(startDate |> Date.startOfDay);
   Js.log(endDate |> Date.endOfDay);
@@ -40,6 +40,9 @@ let getLogs = (startDate: Date.t, endDate: Date.t) => {
         "on": {
           "$gt": startDate |> Date.startOfDay,
           "$lt": endDate |> Date.endOfDay,
+        },
+        "level": {
+          "$gte": minimumLevel,
         },
       },
       (),
