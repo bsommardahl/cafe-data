@@ -41,14 +41,19 @@ type pouchdb;
 
 [@bs.send] external plugin : (pouchdb, pouchdbFind) => unit = "plugin";
 
-[@bs.send.pipe: Pouchdb.t] external sync : (Pouchdb.t, 'a) => unit = "";
+[@bs.send.pipe: Pouchdb.t] external sync : (Pouchdb.t, 'a) => Pouchdb.t = "";
+
+[@bs.send.pipe: Pouchdb.t]
+external on : (string, 'a => unit) => Pouchdb.t = "on";
 
 [@bs.module "pouchdb"] external pouchdb : pouchdb = "default";
 
 [@bs.module "pouchdb"] [@bs.new]
 external connect : (string, 'a) => Pouchdb.t = "default";
 
-let connect = (dbName: string, dbConfig: Config.Database.pouchDbConfig) => {
+let connect =
+    (dbName: string, dbConfig: Config.Database.pouchDbConfig)
+    : Pouchdb.t => {
   plugin(pouchdb, pouchdbFind);
   let localDbConfig = dbConfig.local;
   let localHostName = localDbConfig.host ++ dbName;
@@ -61,7 +66,6 @@ let connect = (dbName: string, dbConfig: Config.Database.pouchDbConfig) => {
         remoteDbConfig.options,
       );
     local |> sync(remote, remoteDbConfig.syncOptions);
-  | None => ()
+  | None => local
   };
-  local;
 };
