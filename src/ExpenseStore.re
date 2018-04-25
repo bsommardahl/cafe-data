@@ -2,14 +2,13 @@ open Js.Promise;
 
 open PouchdbImpl;
 
-let expenseDb =
-  PouchdbImpl.connect("expenses", Config.Database.livePouchDbConfig);
+let db = DbHelper.init("expenses", event => Js.log(event));
 
 let add = (newExpense: Expense.New.t) =>
-  expenseDb
+  db
   |> post(newExpense |> Expense.New.mapToJs)
   |> then_(revResponse =>
-       expenseDb
+       db
        |> get(revResponse##id)
        |> then_(js => {
             let o = js |> Expense.fromJs;
@@ -21,7 +20,7 @@ let add = (newExpense: Expense.New.t) =>
      );
 
 let query = (query: Pouchdb.QueryBuilder.queryT) =>
-  expenseDb
+  db
   |> find(query)
   |> then_(response => resolve(response##docs))
   |> then_(docs => {
@@ -58,11 +57,11 @@ let getAllInRange = (startDate: Date.t, endDate: Date.t) =>
   );
 
 let update = (expense: Expense.t) : Js.Promise.t(Expense.t) =>
-  expenseDb
+  db
   |> get(expense.id)
   |> then_(js => {
        let modified = expense |> Expense.toJsWithRev(js##_rev);
-       expenseDb
+       db
        |> put(modified)
        |> then_(_rev => {
             Js.log("ExpenseStore:: updated Expense for " ++ js##name);
@@ -71,10 +70,10 @@ let update = (expense: Expense.t) : Js.Promise.t(Expense.t) =>
      });
 
 let remove = (discoundId: string) : t(unit) =>
-  expenseDb
+  db
   |> PouchdbImpl.get(discoundId)
   |> then_(item =>
-       expenseDb
+       db
        |> remove(item)
        |> then_((_) => {
             Js.log("ExpenseStore:: removed Expense with id: " ++ discoundId);

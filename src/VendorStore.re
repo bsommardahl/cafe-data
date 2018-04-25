@@ -2,7 +2,7 @@ open Js.Promise;
 
 open PouchdbImpl;
 
-let db = PouchdbImpl.connect("vendors", Config.Database.livePouchDbConfig);
+let db = DbHelper.init("vendors", event => Js.log(event));
 
 let add = (newVendor: Vendor.New.t) =>
   db

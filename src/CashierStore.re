@@ -2,7 +2,7 @@ open Js.Promise;
 
 open PouchdbImpl;
 
-let db = PouchdbImpl.connect("cashiers", Config.Database.livePouchDbConfig);
+let db = DbHelper.init("cashiers", event => Js.log(event));
 
 let add = (newCashier: Cashier.New.t) =>
   db

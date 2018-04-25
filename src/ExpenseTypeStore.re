@@ -2,8 +2,7 @@ open Js.Promise;
 
 open PouchdbImpl;
 
-let db =
-  PouchdbImpl.connect("expensetypes", Config.Database.livePouchDbConfig);
+let db = DbHelper.init("expensetypes", event => Js.log(event));
 
 let add = (newExpenseType: ExpenseType.New.t) =>
   db

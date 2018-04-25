@@ -41,23 +41,22 @@ type pouchdb;
 
 [@bs.send] external plugin : (pouchdb, pouchdbFind) => unit = "plugin";
 
-[@bs.send.pipe: Pouchdb.t] external sync : (Pouchdb.t, 'a) => Pouchdb.t = "";
+type eventEmitter;
 
 [@bs.send.pipe: Pouchdb.t]
-external on : (string, 'a => unit) => Pouchdb.t = "on";
+external sync : (Pouchdb.t, 'a) => eventEmitter = "";
+
+[@bs.send.pipe: eventEmitter]
+external on : (string, 'a => unit) => eventEmitter = "on";
 
 [@bs.module "pouchdb"] external pouchdb : pouchdb = "default";
 
 [@bs.module "pouchdb"] [@bs.new]
 external connect : (string, 'a) => Pouchdb.t = "default";
 
-let connect =
-    (dbName: string, dbConfig: Config.Database.pouchDbConfig)
-    : Pouchdb.t => {
-  plugin(pouchdb, pouchdbFind);
-  let localDbConfig = dbConfig.local;
-  let localHostName = localDbConfig.host ++ dbName;
-  let local = connect(localHostName, localDbConfig.options);
+let initRemoteSync =
+    (dbName, dbConfig: Config.Database.pouchDbConfig, local)
+    : Most.stream('a) =>
   switch (dbConfig.remote) {
   | Some(remoteDbConfig) =>
     let remote =
@@ -65,7 +64,16 @@ let connect =
         remoteDbConfig.host ++ "/" ++ (dbName |> Js.String.toLowerCase),
         remoteDbConfig.options,
       );
-    local |> sync(remote, remoteDbConfig.syncOptions);
-  | None => local
+    let syncEmitter = local |> sync(remote, remoteDbConfig.syncOptions);
+    Most.fromEventEmitter("", syncEmitter, Js.true_);
+  | None => Most.empty()
   };
+
+let connect =
+    (dbName: string, dbConfig: Config.Database.pouchDbConfig)
+    : Pouchdb.t => {
+  plugin(pouchdb, pouchdbFind);
+  let localDbConfig = dbConfig.local;
+  let localHostName = localDbConfig.host ++ dbName;
+  connect(localHostName, localDbConfig.options);
 };

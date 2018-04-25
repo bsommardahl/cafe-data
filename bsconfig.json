@@ -13,7 +13,8 @@
   "allowed-build-kinds": "js",
   "bs-dependencies": [
     "bs-jest",
-    "cafe-domain"
+    "cafe-domain",
+    "bs-most"
   ],
   "refmt": 3
 }
