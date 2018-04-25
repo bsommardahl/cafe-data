@@ -53,4 +53,9 @@ let createIndex: ('a, t) => unit;
 
 let connect: string => t;
 
+type syncEvents = {
+  onActive: Most.stream(unit),
+  onComplete: Most.stream(unit),
+};
+
 module type init = {let connect: string => t;};

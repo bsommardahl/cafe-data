@@ -1,6 +1,6 @@
 type dbReturn = {
   local: Pouchdb.t,
-  remote: Most.stream(unit),
+  remote: Pouchdb.syncEvents,
 };
 
 let init = (dbName: string) : dbReturn => {

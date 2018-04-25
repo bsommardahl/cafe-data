@@ -56,7 +56,7 @@ external connect : (string, 'a) => Pouchdb.t = "default";
 
 let initRemoteSync =
     (dbName, dbConfig: Config.Database.pouchDbConfig, local)
-    : Most.stream('a) =>
+    : Pouchdb.syncEvents =>
   switch (dbConfig.remote) {
   | Some(remoteDbConfig) =>
     let remote =
@@ -65,8 +65,11 @@ let initRemoteSync =
         remoteDbConfig.options,
       );
     let syncEmitter = local |> sync(remote, remoteDbConfig.syncOptions);
-    Most.fromEventEmitter("active", syncEmitter, Js.false_);
-  | None => Most.empty()
+    {
+      onActive: Most.fromEventEmitter("active", syncEmitter, Js.false_),
+      onComplete: Most.fromEventEmitter("complete", syncEmitter, Js.false_),
+    };
+  | None => {onActive: Most.empty(), onComplete: Most.empty()}
   };
 
 let connect =
