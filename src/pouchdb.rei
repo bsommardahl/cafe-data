@@ -54,8 +54,12 @@ let createIndex: ('a, t) => unit;
 let connect: string => t;
 
 type syncEvents = {
-  onActive: Most.stream(unit),
-  onComplete: Most.stream(unit),
+  active: Most.stream(unit),
+  complete: Most.stream(unit),
+  paused: Most.stream(unit),
+  error: Most.stream(unit),
+  denied: Most.stream(unit),
+  change: Most.stream(unit),
 };
 
 module type init = {let connect: string => t;};
