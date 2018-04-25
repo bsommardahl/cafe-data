@@ -2,7 +2,9 @@ open Js.Promise;
 
 open PouchdbImpl;
 
-let db = DbHelper.init("webhooks", event => Js.log(event));
+let connection = DbHelper.init("webhooks");
+
+let db = connection.local;
 
 let add = (newWebhook: Webhook.New.t) =>
   db

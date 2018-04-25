@@ -2,7 +2,9 @@ open Js.Promise;
 
 open PouchdbImpl;
 
-let db = DbHelper.init("expensetypes", event => Js.log(event));
+let connection = DbHelper.init("expensetypes");
+
+let db = connection.local;
 
 let add = (newExpenseType: ExpenseType.New.t) =>
   db

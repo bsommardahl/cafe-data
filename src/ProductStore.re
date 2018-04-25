@@ -2,7 +2,9 @@ open Js.Promise;
 
 open PouchdbImpl;
 
-let db = DbHelper.init("products", event => Js.log(event));
+let connection = DbHelper.init("products");
+
+let db = connection.local;
 
 let add = (newProduct: Product.NewProduct.t) =>
   db

@@ -2,7 +2,9 @@ open Js.Promise;
 
 open PouchdbImpl;
 
-let db = DbHelper.init("orders", () => Js.log("Orders sync active"));
+let connection = DbHelper.init("orders");
+
+let db = connection.local;
 
 let add = (newOrder: Order.newOrder) : Js.Promise.t(Order.t) =>
   db
