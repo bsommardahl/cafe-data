@@ -65,7 +65,7 @@ let initRemoteSync =
         remoteDbConfig.options,
       );
     let syncEmitter = local |> sync(remote, remoteDbConfig.syncOptions);
-    Most.fromEventEmitter("", syncEmitter, Js.true_);
+    Most.fromEventEmitter("active", syncEmitter, Js.true_);
   | None => Most.empty()
   };
 
