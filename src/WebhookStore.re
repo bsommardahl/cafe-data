@@ -31,6 +31,7 @@ let getAll = () : Most.stream(Webhook.t) =>
                                   }, ()),
      )
   |> Most.fromPromise
+  |> Most.awaitPromises
   |> Most.flatMap(response => {
        Js.log(
          "WebhookStore:: got Webhooks: "
