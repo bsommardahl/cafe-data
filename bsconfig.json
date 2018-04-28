@@ -13,6 +13,7 @@
   "allowed-build-kinds": "js",
   "bs-dependencies": [
     "bs-jest",
+    "bs-most",
     "cafe-domain",
     "bs-most"
   ],

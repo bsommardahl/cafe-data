@@ -21,7 +21,7 @@ let add = (newWebhook: Webhook.New.t) =>
           })
      );
 
-let getAll = () =>
+let getAll = () : Most.stream(Webhook.t) =>
   db
   |> find(
        Pouchdb.QueryBuilder.query(~selector={
@@ -30,17 +30,15 @@ let getAll = () =>
                                     },
                                   }, ()),
      )
-  |> then_(response => resolve(response##docs))
-  |> then_(docs => {
-       let mapped: array(Webhook.t) =
-         docs |> Array.map(d => Webhook.fromJs(d));
+  |> Most.fromPromise
+  |> Most.flatMap(response => {
        Js.log(
          "WebhookStore:: got Webhooks: "
-         ++ string_of_int(docs |> Array.length),
+         ++ string_of_int(response##docs |> Array.length),
        );
-       resolve(mapped);
+       response##docs |> Array.to_list |> Most.fromList;
      })
-  |> then_(expenses => resolve(Array.to_list(expenses)));
+  |> Most.map(doc => doc |> Webhook.fromJs);
 
 let remove = (discoundId: string) : t(unit) =>
   db
