@@ -21,7 +21,7 @@ let add = (newWebhook: Webhook.New.t) =>
           })
      );
 
-let getAll = () : Most.stream(Webhook.t) =>
+let getAll = () : Js.Promise.t(list(Webhook.t)) =>
   db()
   |> find(
        Pouchdb.QueryBuilder.query(~selector={
@@ -42,8 +42,7 @@ let getAll = () : Most.stream(Webhook.t) =>
        Js.Promise.resolve(
          docs |> Array.to_list |> List.map(x => Webhook.fromJs(x)),
        )
-     )
-  |> Rx.listToStream;
+     );
 
 let remove = (discoundId: string) : t(unit) =>
   db()
