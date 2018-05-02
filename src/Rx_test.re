@@ -4,20 +4,31 @@ open Expect;
 
 open Js.Promise;
 
+let buildWebhook = id : Webhook.t => {
+  id,
+  name: "test",
+  url: "url1",
+  event: OrderPaid,
+  source: Order,
+};
+
 describe("The Webhook Store", () =>
-  describe("When getting all webhooks and returning a stream", () => {
+  describe("When transforming a promise of webhooks to a stream", () => {
+    let webhooksPromise =
+      Js.Promise.resolve([
+        buildWebhook("1"),
+        buildWebhook("2"),
+        buildWebhook("2"),
+      ]);
     testAsync("it should return all webhooks as separate events", finish => {
-      Js.log("running test");
-      Most.(
-        Js.Promise.make((~resolve, ~reject) => resolve(. "testing"))
-        |> fromPromise
-        |> observe(w => Js.log(w))
-        |> then_((_) => {
-             Js.log("Stream completed");
-             finish(expect(1) |> toBe(1));
-             Js.Promise.resolve();
-           })
-      )
+      let stream = webhooksPromise |> Rx.listToStream;
+      stream
+      |> Most.observe(w => Js.log(w))
+      |> then_((_) => {
+           Js.log("Stream completed");
+           finish(expect(1) |> toBe(1));
+           Js.Promise.resolve();
+         })
       |> ignore;
       ();
     });

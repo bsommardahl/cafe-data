@@ -4,13 +4,13 @@ open PouchdbImpl;
 
 let connection = DbHelper.init("webhooks");
 
-let db = connection.local;
+let db = () => connection.local;
 
 let add = (newWebhook: Webhook.New.t) =>
-  db
+  db()
   |> post(newWebhook |> Webhook.New.toJs)
   |> then_(revResponse =>
-       db
+       db()
        |> get(revResponse##id)
        |> then_(js => {
             let o = js |> Webhook.fromJs;
@@ -22,7 +22,7 @@ let add = (newWebhook: Webhook.New.t) =>
      );
 
 let getAll = () : Most.stream(Webhook.t) =>
-  db
+  db()
   |> find(
        Pouchdb.QueryBuilder.query(~selector={
                                     "_id": {
@@ -38,15 +38,18 @@ let getAll = () : Most.stream(Webhook.t) =>
        );
        Js.Promise.resolve(docs);
      })
-  |> Most.fromPromise
-  |> Most.flatMap(docs => docs |> Array.to_list |> Most.fromList)
-  |> Most.map(doc => doc |> Webhook.fromJs);
+  |> then_(docs =>
+       Js.Promise.resolve(
+         docs |> Array.to_list |> List.map(x => Webhook.fromJs(x)),
+       )
+     )
+  |> Rx.listToStream;
 
 let remove = (discoundId: string) : t(unit) =>
-  db
+  db()
   |> PouchdbImpl.get(discoundId)
   |> then_(item =>
-       db
+       db()
        |> remove(item)
        |> then_((_) => {
             Js.log("WebhookStore:: removed Webhook with id: " ++ discoundId);
