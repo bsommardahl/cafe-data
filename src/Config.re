@@ -1,9 +1,3 @@
-let setValue = (key: string, value: string) =>
-  Dom.Storage.localStorage |> Dom.Storage.setItem(key, value);
-
-let getValue = (key: string) =>
-  Dom.Storage.localStorage |> Dom.Storage.getItem(key);
-
 module Database = {
   type dbOptions = {
     .
@@ -76,7 +70,7 @@ module Database = {
     let config = {
       local: defaultLocalConnection,
       remote:
-        switch (getValue(syncKey)) {
+        switch (LocalStorage.getValue(syncKey)) {
         | None => None
         | Some(configDelimited) =>
           Some(configDelimited |> toSyncConnectionConfig)

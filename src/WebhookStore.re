@@ -30,15 +30,16 @@ let getAll = () : Most.stream(Webhook.t) =>
                                     },
                                   }, ()),
      )
-  |> Most.fromPromise
-  |> Most.awaitPromises
-  |> Most.flatMap(response => {
+  |> then_(response => Js.Promise.resolve(response##docs))
+  |> then_(docs => {
        Js.log(
          "WebhookStore:: got Webhooks: "
-         ++ string_of_int(response##docs |> Array.length),
+         ++ string_of_int(docs |> Array.length),
        );
-       response##docs |> Array.to_list |> Most.fromList;
+       Js.Promise.resolve(docs);
      })
+  |> Most.fromPromise
+  |> Most.flatMap(docs => docs |> Array.to_list |> Most.fromList)
   |> Most.map(doc => doc |> Webhook.fromJs);
 
 let remove = (discoundId: string) : t(unit) =>
