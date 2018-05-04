@@ -1,3 +1,31 @@
+module App = {
+  type t = {
+    language: string,
+    deviceId: string,
+  };
+  let defaultConfig = {language: "EN", deviceId: ""};
+  let toString = config =>
+    [|config.language, config.deviceId|] |> Js.Array.joinWith("||");
+  let fromString = str => {
+    let arr = str |> Js.String.split("||") |> Array.to_list;
+    if (arr |> List.length == 0) {
+      defaultConfig;
+    } else {
+      {language: arr |. List.nth(0), deviceId: arr |. List.nth(1)};
+    };
+  };
+  let appConfigKey = "appConfig";
+  let get = () => {
+    let maybe = LocalStorage.getValue(appConfigKey);
+    switch (maybe) {
+    | None => defaultConfig
+    | Some(config) => config |> fromString
+    };
+  };
+  let set = (config: t) =>
+    LocalStorage.setValue(appConfigKey, config |> toString);
+};
+
 module Database = {
   type dbOptions = {
     .
