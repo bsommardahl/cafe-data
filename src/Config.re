@@ -2,12 +2,24 @@ module App = {
   type t = {
     language: string,
     deviceId: string,
-    now: Date.t,
+    now: option(Date.t),
   };
-  let defaultConfig = {language: "EN", deviceId: "", now: Date.now()};
+  let defaultConfig = {language: "EN", deviceId: "", now: None};
   let toString = config =>
-    [|config.language, config.deviceId, config.now |> string_of_float|]
+    [|
+      config.language,
+      config.deviceId,
+      switch (config.now) {
+      | None => "0"
+      | Some(d) => d |> string_of_float
+      },
+    |]
     |> Js.Array.joinWith("||");
+  let getDate = arr =>
+    switch (arr |. List.nth(2)) {
+    | "0" => None
+    | d => Some(d |> float_of_string)
+    };
   let fromString = str => {
     let arr = str |> Js.String.split("||") |> Array.to_list;
     if (arr |> List.length == 0) {
@@ -16,9 +28,7 @@ module App = {
       {
         language: arr |. List.nth(0),
         deviceId: arr |. List.nth(1),
-        now:
-          arr |> List.length > 2 ?
-            arr |. List.nth(2) |> float_of_string : Js.Date.now(),
+        now: arr |> List.length === 0 ? None : getDate(arr),
       };
     };
   };
