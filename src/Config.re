@@ -28,7 +28,7 @@ module App = {
       {
         language: arr |. List.nth(0),
         deviceId: arr |. List.nth(1),
-        now: arr |> List.length === 0 ? None : getDate(arr),
+        now: arr |> List.length > 2 ? getDate(arr) : None,
       };
     };
   };
