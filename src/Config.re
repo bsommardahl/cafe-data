@@ -16,7 +16,9 @@ module App = {
       {
         language: arr |. List.nth(0),
         deviceId: arr |. List.nth(1),
-        now: arr |. List.nth(2) |> float_of_string,
+        now:
+          arr |> List.length > 2 ?
+            arr |. List.nth(2) |> float_of_string : Js.Date.now(),
       };
     };
   };
