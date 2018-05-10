@@ -2,16 +2,22 @@ module App = {
   type t = {
     language: string,
     deviceId: string,
+    now: Date.t,
   };
-  let defaultConfig = {language: "EN", deviceId: ""};
+  let defaultConfig = {language: "EN", deviceId: "", now: Date.now()};
   let toString = config =>
-    [|config.language, config.deviceId|] |> Js.Array.joinWith("||");
+    [|config.language, config.deviceId, config.now |> string_of_float|]
+    |> Js.Array.joinWith("||");
   let fromString = str => {
     let arr = str |> Js.String.split("||") |> Array.to_list;
     if (arr |> List.length == 0) {
       defaultConfig;
     } else {
-      {language: arr |. List.nth(0), deviceId: arr |. List.nth(1)};
+      {
+        language: arr |. List.nth(0),
+        deviceId: arr |. List.nth(1),
+        now: arr |. List.nth(2) |> float_of_string,
+      };
     };
   };
   let appConfigKey = "appConfig";
