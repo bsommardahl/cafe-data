@@ -51,7 +51,7 @@ let getAllInRange = (startDate: Date.t, endDate: Date.t) =>
       ~selector={
         "date": {
           "$gt": startDate,
-          "$lt": endDate |> Date.addDays(1),
+          "$lt": endDate,
         },
       },
       (),
