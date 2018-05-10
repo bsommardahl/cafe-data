@@ -76,22 +76,18 @@ let getAll = () =>
                                }, ()),
   );
 
-let getClosedOrders = (startDate: Date.t, endDate: Date.t) => {
-  Js.log("getting closed orders in range");
-  Js.log(startDate |> Date.startOfDay);
-  Js.log(endDate |> Date.endOfDay);
+let getClosedOrders = (startDate: Date.t, endDate: Date.t) =>
   query(
     Pouchdb.QueryBuilder.query(
       ~selector={
         "paid.on": {
-          "$gt": startDate |> Date.startOfDay,
-          "$lt": endDate |> Date.endOfDay,
+          "$gt": startDate,
+          "$lt": endDate,
         },
       },
       (),
     ),
   );
-};
 
 let update = (updateOrder: Order.updateOrder) : Js.Promise.t(Order.t) =>
   db
