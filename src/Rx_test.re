@@ -10,6 +10,7 @@ let buildWebhook = id : Webhook.t => {
   url: "url1",
   event: OrderPaid,
   source: Order,
+  behavior: FireAndForget,
 };
 
 describe("The Webhook Store", () =>
