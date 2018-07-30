@@ -11,12 +11,17 @@
     "watch:jest": "jest --watchAll"
   },
   "dependencies": {
-    "bs-most": "github:bsommardahl/bs-most",
     "pouchdb": "^6.4.3",
     "pouchdb-find": "^6.4.3"
   },
+  "peerDependencies": {
+    "bs-most": "github:bsommardahl/bs-most",
+    "cafe-domain": "github:bsommardahl/cafe-domain"
+  },
   "devDependencies": {
     "@glennsl/bs-jest": "^0.4.2",
+    "bs-most": "github:bsommardahl/bs-most",
+    "cafe-domain": "github:bsommardahl/cafe-domain",
     "bs-platform": "^4.0.2"
   }
 }
