@@ -66,12 +66,12 @@ let initRemoteSync =
       );
     let syncEmitter = local |> sync(remote, remoteDbConfig.syncOptions);
     {
-      active: Most.fromEventEmitter("active", syncEmitter, Js.false_),
-      complete: Most.fromEventEmitter("complete", syncEmitter, Js.false_),
-      paused: Most.fromEventEmitter("paused", syncEmitter, Js.false_),
-      denied: Most.fromEventEmitter("denied", syncEmitter, Js.false_),
-      error: Most.fromEventEmitter("error", syncEmitter, Js.false_),
-      change: Most.fromEventEmitter("change", syncEmitter, Js.false_),
+      active: Most.fromEventEmitter("active", syncEmitter, false),
+      complete: Most.fromEventEmitter("complete", syncEmitter, false),
+      paused: Most.fromEventEmitter("paused", syncEmitter, false),
+      denied: Most.fromEventEmitter("denied", syncEmitter, false),
+      error: Most.fromEventEmitter("error", syncEmitter, false),
+      change: Most.fromEventEmitter("change", syncEmitter, false),
     };
   | None => {
       active: Most.empty(),
