@@ -12,17 +12,11 @@
   },
   "dependencies": {
     "bs-most": "github:bsommardahl/bs-most",
-    "cafe-domain": "github:bsommardahl/cafe-domain",
     "pouchdb": "^6.4.3",
     "pouchdb-find": "^6.4.3"
   },
   "devDependencies": {
-    "bs-jest": "^0.3.2",
+    "@glennsl/bs-jest": "^0.4.2",
     "bs-platform": "^4.0.2"
-  },
-  "jest": {
-    "testMatch": [
-      "<rootDir>/lib/js/**/*test.{bs.js,js}"
-    ]
   }
 }
