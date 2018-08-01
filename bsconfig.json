@@ -1,7 +1,9 @@
 {
   "name": "cafe-data",
   "version": "0.0.2",
-  "bsc-flags": ["-bs-super-errors"],
+  "bsc-flags": [
+    "-bs-super-errors"
+  ],
   "sources": [
     {
       "dir": "src"
@@ -11,8 +13,18 @@
       "type": "dev"
     }
   ],
+  "package-specs": {
+    "module": "commonjs",
+    "in-source": false
+  },
+  "suffix": ".bs.js",
   "allowed-build-kinds": "js",
-  "bs-dependencies": ["bs-most", "cafe-domain"],
-  "bs-dev-dependencies": ["@glennsl/bs-jest"],
+  "bs-dependencies": [
+    "bs-most",
+    "cafe-domain"
+  ],
+  "bs-dev-dependencies": [
+    "@glennsl/bs-jest"
+  ],
   "refmt": 3
 }
