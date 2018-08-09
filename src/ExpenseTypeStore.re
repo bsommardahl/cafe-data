@@ -62,16 +62,14 @@ let update = (expenseType: ExpenseType.t) : Js.Promise.t(ExpenseType.t) =>
           });
      });
 
-let remove = (discoundId: string) : t(unit) =>
+let remove = (~id: string) : t(unit) =>
   db
-  |> PouchdbImpl.get(discoundId)
+  |> PouchdbImpl.get(id)
   |> then_(item =>
        db
        |> remove(item)
        |> then_(_ => {
-            Js.log(
-              "ExpenseTypeStore:: removed ExpenseType with id: " ++ discoundId,
-            );
+            Js.log("ExpenseTypeStore:: removed ExpenseType with id: " ++ id);
             resolve();
           })
      );

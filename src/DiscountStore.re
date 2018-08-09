@@ -60,16 +60,14 @@ let update = (discount: Discount.t) : Js.Promise.t(Discount.t) =>
           });
      });
 
-let remove = (discoundId: string) : t(unit) =>
+let remove = (~id: string) : t(unit) =>
   db
-  |> PouchdbImpl.get(discoundId)
+  |> PouchdbImpl.get(id)
   |> then_(item =>
        db
        |> remove(item)
        |> then_(_ => {
-            Js.log(
-              "DiscountStore:: removed Discount with id: " ++ discoundId,
-            );
+            Js.log("DiscountStore:: removed Discount with id: " ++ id);
             resolve();
           })
      );

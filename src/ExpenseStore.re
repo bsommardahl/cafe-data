@@ -76,14 +76,14 @@ let update = (expense: Expense.t) : Js.Promise.t(Expense.t) =>
           });
      });
 
-let remove = (discoundId: string) : t(unit) =>
+let remove = (~id: string) : t(unit) =>
   db
-  |> PouchdbImpl.get(discoundId)
+  |> PouchdbImpl.get(id)
   |> then_(item =>
        db
        |> remove(item)
        |> then_(_ => {
-            Js.log("ExpenseStore:: removed Expense with id: " ++ discoundId);
+            Js.log("ExpenseStore:: removed Expense with id: " ++ id);
             resolve();
           })
      );

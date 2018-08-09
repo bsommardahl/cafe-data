@@ -57,14 +57,14 @@ let update = (expense: Vendor.t) : Js.Promise.t(Vendor.t) =>
           });
      });
 
-let remove = (discoundId: string) : t(unit) =>
+let remove = (~id: string) : t(unit) =>
   db
-  |> PouchdbImpl.get(discoundId)
+  |> PouchdbImpl.get(id)
   |> then_(item =>
        db
        |> remove(item)
        |> then_(_ => {
-            Js.log("VendorStore:: removed Vendor with id: " ++ discoundId);
+            Js.log("VendorStore:: removed Vendor with id: " ++ id);
             resolve();
           })
      );

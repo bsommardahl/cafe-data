@@ -123,14 +123,14 @@ let get = (orderId: string) =>
        Js.Promise.resolve(order);
      });
 
-let remove = (orderId: string) : Js.Promise.t(unit) =>
+let remove = (~id: string) : Js.Promise.t(unit) =>
   db
-  |> PouchdbImpl.get(orderId)
+  |> PouchdbImpl.get(id)
   |> then_(order =>
        db
        |> remove(order)
        |> then_(_ => {
-            Js.log("orderStore:: removed order with id: " ++ orderId);
+            Js.log("orderStore:: removed order with id: " ++ id);
             resolve();
           })
      );

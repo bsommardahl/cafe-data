@@ -60,14 +60,14 @@ let update = (prod: Product.t) : t(Product.t) =>
           });
      });
 
-let remove = (productId: string) : t(unit) =>
+let remove = (~id: string) : t(unit) =>
   db
-  |> PouchdbImpl.get(productId)
+  |> PouchdbImpl.get(id)
   |> then_(item =>
        db
        |> remove(item)
        |> then_(_ => {
-            Js.log("ProductStore:: removed product with id: " ++ productId);
+            Js.log("ProductStore:: removed product with id: " ++ id);
             resolve();
           })
      );
