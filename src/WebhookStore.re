@@ -4,6 +4,11 @@ open PouchdbImpl;
 
 let connection = DbHelper.init("webhooks");
 
+type item = Webhook.t;
+type newItem = Webhook.New.t;
+
+let id = (item: item) => item.id;
+
 let db = () => connection.local;
 
 let add = (newWebhook: Webhook.New.t) =>
@@ -50,7 +55,7 @@ let remove = (discoundId: string) : t(unit) =>
   |> then_(item =>
        db()
        |> remove(item)
-       |> then_((_) => {
+       |> then_(_ => {
             Js.log("WebhookStore:: removed Webhook with id: " ++ discoundId);
             resolve();
           })

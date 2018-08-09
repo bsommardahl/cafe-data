@@ -4,6 +4,11 @@ open PouchdbImpl;
 
 let connection = DbHelper.init("vendors");
 
+type item = Vendor.t;
+type newItem = Vendor.New.t;
+
+let id = (item: item) => item.id;
+
 let db = connection.local;
 
 let add = (newVendor: Vendor.New.t) =>
@@ -58,7 +63,7 @@ let remove = (discoundId: string) : t(unit) =>
   |> then_(item =>
        db
        |> remove(item)
-       |> then_((_) => {
+       |> then_(_ => {
             Js.log("VendorStore:: removed Vendor with id: " ++ discoundId);
             resolve();
           })

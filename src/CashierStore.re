@@ -4,6 +4,11 @@ open PouchdbImpl;
 
 let connection = DbHelper.init("cashiers");
 
+type item = Cashier.t;
+type newItem = Cashier.New.t;
+
+let id = (item: item) => item.id;
+
 let db = connection.local;
 
 let add = (newCashier: Cashier.New.t) =>
@@ -61,7 +66,7 @@ let remove = (discoundId: string) : t(unit) =>
   |> then_(item =>
        db
        |> remove(item)
-       |> then_((_) => {
+       |> then_(_ => {
             Js.log("CashierStore:: removed Cashier with id: " ++ discoundId);
             resolve();
           })

@@ -4,6 +4,11 @@ open PouchdbImpl;
 
 let connection = DbHelper.init("logs");
 
+type item = Log.t;
+type newItem = Log.New.t;
+
+let id = (item: item) => item.id;
+
 let db = connection.local;
 
 let add = (newLog: Log.New.t) =>

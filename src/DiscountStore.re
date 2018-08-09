@@ -4,6 +4,11 @@ open PouchdbImpl;
 
 let connection = DbHelper.init("discounts");
 
+type item = Discount.t;
+type newItem = Discount.NewDiscount.t;
+
+let id = (item: item) => item.id;
+
 let db = connection.local;
 
 let add = (newDiscount: Discount.NewDiscount.t) =>
@@ -61,7 +66,7 @@ let remove = (discoundId: string) : t(unit) =>
   |> then_(item =>
        db
        |> remove(item)
-       |> then_((_) => {
+       |> then_(_ => {
             Js.log(
               "DiscountStore:: removed Discount with id: " ++ discoundId,
             );
