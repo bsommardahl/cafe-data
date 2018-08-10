@@ -56,7 +56,7 @@ let update = (expense: Cashier.t) : Js.Promise.t(Cashier.t) =>
        |> put(modified)
        |> then_(_rev => {
             Js.log("CashierStore:: updated Cashier for " ++ js##name);
-            resolve(Cashier.fromJs(js));
+            resolve(expense);
           });
      });
 

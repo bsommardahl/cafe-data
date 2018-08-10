@@ -56,7 +56,7 @@ let update = (discount: Discount.t) : Js.Promise.t(Discount.t) =>
        |> put(modified)
        |> then_(_rev => {
             Js.log("DiscountStore:: updated Discount for " ++ js##name);
-            resolve(Discount.mapFromJs(js));
+            resolve(discount);
           });
      });
 

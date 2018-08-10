@@ -56,7 +56,7 @@ let update = (prod: Product.t) : t(Product.t) =>
        |> put(modified)
        |> then_(_rev => {
             Js.log("productStore:: updated product for " ++ js##name);
-            resolve(Product.mapFromJs(js));
+            resolve(prod);
           });
      });
 
