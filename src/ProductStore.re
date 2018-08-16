@@ -4,6 +4,11 @@ open PouchdbImpl;
 
 let connection = DbHelper.init("products");
 
+type item = Product.t;
+type newItem = Product.NewProduct.t;
+
+let id = (item: item) => item.id;
+
 let db = connection.local;
 
 let add = (newProduct: Product.NewProduct.t) =>
@@ -51,18 +56,18 @@ let update = (prod: Product.t) : t(Product.t) =>
        |> put(modified)
        |> then_(_rev => {
             Js.log("productStore:: updated product for " ++ js##name);
-            resolve(Product.mapFromJs(js));
+            resolve(prod);
           });
      });
 
-let remove = (productId: string) : t(unit) =>
+let remove = (~id: string) : t(unit) =>
   db
-  |> PouchdbImpl.get(productId)
+  |> PouchdbImpl.get(id)
   |> then_(item =>
        db
        |> remove(item)
-       |> then_((_) => {
-            Js.log("ProductStore:: removed product with id: " ++ productId);
+       |> then_(_ => {
+            Js.log("ProductStore:: removed product with id: " ++ id);
             resolve();
           })
      );

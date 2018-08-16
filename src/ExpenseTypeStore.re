@@ -4,6 +4,11 @@ open PouchdbImpl;
 
 let connection = DbHelper.init("expensetypes");
 
+type item = ExpenseType.t;
+type newItem = ExpenseType.New.t;
+
+let id = (item: item) => item.id;
+
 let db = connection.local;
 
 let add = (newExpenseType: ExpenseType.New.t) =>
@@ -57,16 +62,14 @@ let update = (expenseType: ExpenseType.t) : Js.Promise.t(ExpenseType.t) =>
           });
      });
 
-let remove = (discoundId: string) : t(unit) =>
+let remove = (~id: string) : t(unit) =>
   db
-  |> PouchdbImpl.get(discoundId)
+  |> PouchdbImpl.get(id)
   |> then_(item =>
        db
        |> remove(item)
-       |> then_((_) => {
-            Js.log(
-              "ExpenseTypeStore:: removed ExpenseType with id: " ++ discoundId,
-            );
+       |> then_(_ => {
+            Js.log("ExpenseTypeStore:: removed ExpenseType with id: " ++ id);
             resolve();
           })
      );

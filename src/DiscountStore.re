@@ -4,6 +4,11 @@ open PouchdbImpl;
 
 let connection = DbHelper.init("discounts");
 
+type item = Discount.t;
+type newItem = Discount.NewDiscount.t;
+
+let id = (item: item) => item.id;
+
 let db = connection.local;
 
 let add = (newDiscount: Discount.NewDiscount.t) =>
@@ -51,20 +56,18 @@ let update = (discount: Discount.t) : Js.Promise.t(Discount.t) =>
        |> put(modified)
        |> then_(_rev => {
             Js.log("DiscountStore:: updated Discount for " ++ js##name);
-            resolve(Discount.mapFromJs(js));
+            resolve(discount);
           });
      });
 
-let remove = (discoundId: string) : t(unit) =>
+let remove = (~id: string) : t(unit) =>
   db
-  |> PouchdbImpl.get(discoundId)
+  |> PouchdbImpl.get(id)
   |> then_(item =>
        db
        |> remove(item)
-       |> then_((_) => {
-            Js.log(
-              "DiscountStore:: removed Discount with id: " ++ discoundId,
-            );
+       |> then_(_ => {
+            Js.log("DiscountStore:: removed Discount with id: " ++ id);
             resolve();
           })
      );

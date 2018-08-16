@@ -4,6 +4,11 @@ open PouchdbImpl;
 
 let connection = DbHelper.init("orders");
 
+type item = Order.t;
+type newItem = Order.newOrder;
+
+let id = (item: item) => item.id;
+
 let db = connection.local;
 
 let add = (newOrder: Order.newOrder) : Js.Promise.t(Order.t) =>
@@ -118,14 +123,14 @@ let get = (orderId: string) =>
        Js.Promise.resolve(order);
      });
 
-let remove = (orderId: string) : Js.Promise.t(unit) =>
+let remove = (~id: string) : Js.Promise.t(unit) =>
   db
-  |> PouchdbImpl.get(orderId)
+  |> PouchdbImpl.get(id)
   |> then_(order =>
        db
        |> remove(order)
-       |> then_((_) => {
-            Js.log("orderStore:: removed order with id: " ++ orderId);
+       |> then_(_ => {
+            Js.log("orderStore:: removed order with id: " ++ id);
             resolve();
           })
      );
