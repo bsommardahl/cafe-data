@@ -47,7 +47,7 @@ let getAll = () =>
      })
   |> then_(products => resolve(Array.to_list(products)));
 
-let update = (prod: Product.t) : t(Product.t) =>
+let update = (prod: Product.t): t(Product.t) =>
   db
   |> get(prod.id)
   |> then_(js => {
@@ -60,7 +60,15 @@ let update = (prod: Product.t) : t(Product.t) =>
           });
      });
 
-let remove = (~id: string) : t(unit) =>
+let get = (~id: string) =>
+  db
+  |> get(id)
+  |> then_(js => {
+       let product = Product.mapFromJs(js);
+       Js.Promise.resolve(product);
+     });
+
+let remove = (~id: string): t(unit) =>
   db
   |> PouchdbImpl.get(id)
   |> then_(item =>
