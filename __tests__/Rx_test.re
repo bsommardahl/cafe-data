@@ -4,13 +4,14 @@ open Expect;
 
 open Js.Promise;
 
-let buildWebhook = id : Webhook.t => {
+let buildWebhook = id: Webhook.t => {
   id,
   name: "test",
   url: "url1",
   event: OrderPaid,
   source: Order,
   behavior: FireAndForget,
+  payload: Json,
 };
 
 describe("The Webhook Store", () =>
@@ -25,7 +26,7 @@ describe("The Webhook Store", () =>
       let stream = webhooksPromise |> Rx.promiseWithListToStream;
       stream
       |> Most.observe(w => Js.log(w))
-      |> then_((_) => {
+      |> then_(_ => {
            Js.log("Stream completed");
            finish(expect(1) |> toBe(1));
            Js.Promise.resolve();

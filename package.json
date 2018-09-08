@@ -16,12 +16,12 @@
   },
   "peerDependencies": {
     "bs-most": "github:bsommardahl/bs-most",
-    "cafe-domain": "github:bsommardahl/cafe-domain"
+    "cafe-domain": "github:bsommardahl/cafe-domain#282-user-can-enter-a-user-name-while-adding-an-expense"
   },
   "devDependencies": {
     "@glennsl/bs-jest": "^0.4.3",
     "bs-most": "github:bsommardahl/bs-most",
     "bs-platform": "^4.0.5",
-    "cafe-domain": "github:bsommardahl/cafe-domain"
+    "cafe-domain": "github:bsommardahl/cafe-domain#282-user-can-enter-a-user-name-while-adding-an-expense"
   }
 }
